@@ -2,11 +2,15 @@
 
 A mobile-first web application for managing GitHub repository branches. Clean up dangling branches created by Claude Code for Web sessions, right from your phone.
 
-## Live App
+## Getting Started
 
-**Visit: [https://lawless-m.github.io/GitSkan/](https://lawless-m.github.io/GitSkan/)**
+GitSkan is a self-hosted application. You'll need to deploy your own instance to start managing branches.
 
-No installation required! Just visit the URL, login with GitHub, and start managing your branches.
+**Two deployment options:**
+- **Netlify** (recommended) - Supports full OAuth login
+- **GitHub Pages** - Supports Personal Access Token login only
+
+See the [Deployment](#deployment) section below for setup instructions.
 
 ## Features
 
