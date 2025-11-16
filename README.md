@@ -10,7 +10,7 @@ No installation required! Just visit the URL, login with GitHub, and start manag
 
 ## Features
 
-- 🔐 **Secure Authentication** - Login with your GitHub Personal Access Token
+- 🔐 **GitHub OAuth** - One-click login with GitHub (or use Personal Access Token)
 - 📱 **Mobile-First Design** - Optimized for iPhone Safari and mobile browsers
 - 🔍 **Repository Browser** - View all your repos and their branches
 - ✂️ **Branch Management** - Merge or delete branches with confirmation
@@ -20,13 +20,22 @@ No installation required! Just visit the URL, login with GitHub, and start manag
 
 ## Quick Start
 
-1. Visit [https://lawless-m.github.io/GitSkan/](https://lawless-m.github.io/GitSkan/)
-2. Create a Personal Access Token:
-   - Go to [GitHub Settings > Tokens](https://github.com/settings/tokens/new)
+### Option 1: OAuth Login (Recommended)
+
+1. Visit the deployed app (see Setup section for deployment)
+2. Click "Login with GitHub"
+3. Authorize the app
+4. Start managing your branches!
+
+### Option 2: Personal Access Token
+
+1. Visit the app
+2. Click "Use Personal Access Token"
+3. Create a token at [GitHub Settings > Tokens](https://github.com/settings/tokens/new)
    - Select `repo` scope (required for branch operations)
    - Generate and copy the token
-3. Paste your token into GitSkan and click Login
-4. Browse your repos and manage branches!
+4. Paste your token and login
+5. Browse your repos and manage branches!
 
 ## Usage
 
@@ -89,15 +98,30 @@ npm run preview
 
 ### Deployment
 
-The app automatically deploys to GitHub Pages when changes are pushed to the `main` branch via GitHub Actions.
+#### Option 1: Netlify (Recommended for OAuth)
+
+1. Push your code to GitHub
+2. Connect your repository to Netlify
+3. Configure environment variables (for OAuth):
+   - `VITE_GITHUB_CLIENT_ID`
+   - `GITHUB_CLIENT_ID`
+   - `GITHUB_CLIENT_SECRET`
+4. Deploy!
+
+See [OAUTH_SETUP.md](./OAUTH_SETUP.md) for detailed OAuth configuration.
+
+#### Option 2: GitHub Pages (Static only, no OAuth)
+
+The app automatically deploys to GitHub Pages when changes are pushed to the `main` branch via GitHub Actions. Note: OAuth requires serverless functions, so only Personal Access Token login works with GitHub Pages.
 
 ## Technical Stack
 
 - **Framework:** Svelte 4
 - **Build Tool:** Vite 5
 - **APIs:** GitHub GraphQL API + REST API
-- **Hosting:** GitHub Pages
-- **CI/CD:** GitHub Actions
+- **Hosting:** Netlify (recommended) or GitHub Pages
+- **Serverless:** Netlify Functions (for OAuth)
+- **CI/CD:** GitHub Actions / Netlify
 
 ## Project Structure
 
@@ -105,10 +129,13 @@ The app automatically deploys to GitHub Pages when changes are pushed to the `ma
 GitSkan/
 ├── .github/workflows/
 │   └── deploy.yml          # GitHub Pages deployment
+├── netlify/
+│   └── functions/
+│       └── oauth-callback.js # OAuth token exchange
 ├── src/
 │   ├── lib/
 │   │   ├── github.js       # GitHub API client
-│   │   ├── auth.js         # Authentication logic
+│   │   ├── auth.js         # OAuth & PAT authentication
 │   │   └── stores.js       # Svelte stores
 │   ├── components/
 │   │   ├── Header.svelte
@@ -118,12 +145,14 @@ GitSkan/
 │   │   ├── Modal.svelte
 │   │   └── Toast.svelte
 │   ├── App.svelte          # Main app component
+│   ├── Callback.svelte     # OAuth callback handler
 │   ├── main.js
 │   └── app.css
-├── public/
+├── netlify.toml            # Netlify configuration
 ├── index.html
 ├── vite.config.js
 ├── package.json
+├── OAUTH_SETUP.md          # OAuth setup guide
 └── README.md
 ```
 
@@ -133,11 +162,13 @@ GitSkan/
 - [x] Personal Access Token authentication
 - [x] Repository and branch listing
 - [x] Delete branch functionality
+- [x] Merge branch functionality
 - [x] Mobile-responsive design
 - [x] GitHub Pages deployment
+- [x] GitHub OAuth authentication
+- [x] Netlify deployment support
 
 ### Phase 2: Enhanced Features
-- [ ] OAuth flow (replace PAT entry)
 - [ ] Batch operations (select multiple branches)
 - [ ] Better sorting/filtering options
 - [ ] Pull-to-refresh gesture
